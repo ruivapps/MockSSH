@@ -317,7 +317,27 @@ class SSHAvatar(avatar.ConchUser):
         return None
 
     def execCommand(self, protocol, cmd):
-        raise NotImplemented
+        if cmd:
+            self.client = TransportWrapper(protocol)
+
+            cmd_and_args = cmd.split()
+            cmd, args = cmd_and_args[0], cmd_and_args[1:]
+            func = self.get_exec_func(cmd)
+
+            if func:
+                try:
+                    func(*args)
+                except Exception as e:
+                    self.client.write("Error: {0}".format(e))
+            else:
+                self.client.write("No such command.")
+
+            self.client.loseConnection()
+            protocol.session.conn.transport.expectedLoseConnection = 1
+
+        #raise NotImplemented
+    def get_exec_func(self, cmd):
+        return getattr(self, 'exec_' + cmd, None)
 
     def closed(self):
         pass
@@ -511,6 +531,29 @@ def startThreadedServer(commands,
 def stopThreadedServer():
     reactor.callFromThread(reactor.stop)
 
+class TransportWrapper(object):
+
+    def __init__(self, p):
+        self.protocol = p
+        p.makeConnection(self)
+        self.closed = False
+
+    def write(self, data):
+        self.protocol.outReceived(data)
+        self.protocol.outReceived('\r\n')
+
+        # Mimic 'exit' for the shell test
+        if '\x00' in data:
+            self.loseConnection()
+
+    def loseConnection(self):
+        if self.closed:
+            return
+
+        self.closed = True
+        self.protocol.inConnectionLost()
+        self.protocol.outConnectionLost()
+        self.protocol.errConnectionLost()
 
 if __name__ == "__main__":
     users = {'root': 'x'}
