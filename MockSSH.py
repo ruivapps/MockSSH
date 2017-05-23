@@ -118,7 +118,10 @@ class ArgumentValidatingCommand(SSHCommand):
         self.name = name
         self.success_callbacks = success_callbacks
         self.failure_callbacks = failure_callbacks
-        self.required_arguments = [name] + list(args)
+        if isinstance(args[0], list):
+            self.required_arguments = [[name] + list(x) for x in args]
+        else:
+            self.required_arguments = [name] + list(args)
         self.protocol = None  # set in __call__
 
     def __call__(self, protocol, *args):
@@ -126,7 +129,7 @@ class ArgumentValidatingCommand(SSHCommand):
         return self
 
     def start(self):
-        if not tuple(self.args) == tuple(self.required_arguments):
+        if not list(self.args) == self.required_arguments:
             [func(self) for func in self.failure_callbacks]
         else:
             [func(self) for func in self.success_callbacks]
