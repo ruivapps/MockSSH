@@ -4,17 +4,15 @@ import os
 
 from setuptools import Command, find_packages, setup
 
-NAME = "MockSSH"
+NAME = "mock-ssh"
 
-URL = "https://github.com/ncouture/MockSSH"
+URL = "https://github.com/ruivapps/MockSSH"
 
-AUTHOR = 'Nicolas Couture'
+AUTHOR = 'Rui Li'
 
-MAINTAINER = 'Nicolas Couture'
+MAINTAINER = 'Rui Li'
 
-AUTHOR_EMAIL = 'nicolas.couture@gmail.com'
-
-COPYRIGHT = 'Copyright 2013-2016, Nicolas Couture'
+AUTHOR_EMAIL = 'rui.li.spam@gmail.com'
 
 LICENSE = 'BSD'
 
@@ -36,7 +34,7 @@ CLASSIFIERS = [
 
 PLATFORMS = ['Posix', 'MacOS X', 'Windows']
 
-DESCRIPTION = 'MockSSH: Mock an SSH server and all commands it supports.'
+DESCRIPTION = 'mock-ssh: Mock an SSH server and all commands it supports.'
 
 LONG_DESCRIPTION = '''
 MockSSH was developed to emulate operating systems behind SSH servers

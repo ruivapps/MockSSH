@@ -1,7 +1,12 @@
 MockSSH
 =======
 
-Mock an SSH server and all commands it supports.
+Fork of "Mock an SSH server and all commands it supports."
+
+Difference:
+
+1) add support for exec\_command
+2) add support for PIPE command, for example "ls -l | grep xyz"
 
 
 Purpose
@@ -20,7 +25,7 @@ Installation
 MockSSH depends on libraries that do not support Python 3k.
 ```shell
 mkvirtualenv -p `which python2` mocksshenv
-pip install mockssh
+pip install mock-ssh
 ```
 
 MockSSH in Python
